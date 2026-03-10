@@ -1,0 +1,54 @@
+name: task
+services:
+  app:
+    restart: unless-stopped # Reinicia automáticamente el contenedor si se detiene o current problemas de procesos
+    build: ./frontend
+    environment:
+      VITE_API_PROXY_TARGET: http://api:8080
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend/src:/frontend/src
+    depends_on:
+      - api
+  api:
+    restart: unless-stopped
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: db
+      DB_USER: ${APP_DB_USER}
+      DB_PASSWORD: ${APP_DB_PASSWORD}
+      DB_NAME: ${APP_DB_NAME}
+      DB_PORT: 5432
+    ports:
+      - 8080:8080
+    volumes:
+      - ./backend/app:/backend/app
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    restart: unless-stopped
+    image: postgres:18-alpine
+    environment: # Variables provenientes de .env al mismo nivel que docker-compose.yml
+      # Variables para crear la bd, asignar usuario y contraseña (exclusivo para psql)
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      # Variables para remplazarse en el archivo 01-user.sh
+      APP_DB_NAME: ${APP_DB_NAME}
+      APP_DB_USER: ${APP_DB_USER}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD}
+    volumes: # Valumen para persistir los datos de database
+      - postgres_data:/var/lib/postgresql/data # Lugar para persistir los datos
+      - ./db/init:/docker-entrypoint-initdb.d # Ruta de ejecución de scripts y archivos .sql
+    healthcheck: # Revisar si la bd ya esta lista
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes: # Nombre del volumen para persistir los datos. Este volumen es para psql
+  postgres_data:
