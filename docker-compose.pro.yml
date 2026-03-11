@@ -4,7 +4,7 @@ services:
     restart: unless-stopped # Reinicia automáticamente el contenedor si se detiene o current problemas de procesos
     build:
       context: ./frontend
-      dockerfile: Dockerfile.pro.yml
+      dockerfile: Dockerfile.prod
       args:
         VITE_API_PROXY_TARGET: http://api:8080
     ports:
