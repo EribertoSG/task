@@ -1819,3 +1819,9 @@ services:
       args:
         VITE_API_PROXY_TARGET: http://api:8080
 ```
+## 6.7 Construyendo la imagen
+Construir la imagen de react con nginx para ver el peso
+
+```bash
+docker build -t react-nginx -f Dockerfile.prod .
+```
