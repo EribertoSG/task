@@ -1734,3 +1734,29 @@ Compartir la clave que esta en el archivo .pub con el servidor
 ssh-copy-id user@host
 ```
 
+## 6.5 Tipos de docker-componse.yml
+1. docker-compose.prod.yml
+Se utiliza exclusivamente para producción
+
+2. docker-compose.dev.yml
+Se utiliza exclusivamente para desarrollo
+
+3. docker-compose.test.yml
+Se utiliza exclusivamente para pruebas
+
+Aqui podemos reutilizar una imagen de algun servicio como api
+para testear. 
+
+
+* Indicarle el docker-compose al construir las imagenes
+
+```bash
+# Para desarrollo
+docker compose -f docker-compose.dev.yml up
+
+# Para producción
+docker compose -f docker-compose.prod.yml up
+
+# Para pruebas
+docker compose -f docker-compose.test.yml up
+```
