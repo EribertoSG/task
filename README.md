@@ -1761,6 +1761,20 @@ docker compose -f docker-compose.prod.yml up
 docker compose -f docker-compose.test.yml up
 ```
 
+* Reconstruir las imagenes
+
+```bash
+docker compose -f docker-compose.pro.yml up -d --build
+```
+
+* y bajar con:
+
+```bash
+docker compose -f docker-compose.pro.yml down
+```
+
+El volumen no se eliminará.
+
 ## 6.6 Optimizando el tamaño de las imagenes
 
 El objetivo es construir la version minificada de react y utilizar nginx para ejecutar la app.
