@@ -1722,4 +1722,15 @@ docker compose run --rm api bun test
 ## 6.4 Llaves SSH
 * Crear la llave publica y privada 
 
-ssh keygen 
+```bash
+ssh-keygen -t ed25519 -C "tu_email@example.com"
+```
+
+* Compartir la llave publica con el servidor
+
+Compartir la clave que esta en el archivo .pub con el servidor
+
+```bash
+ssh-copy-id user@host
+```
+
