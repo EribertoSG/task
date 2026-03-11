@@ -6,7 +6,7 @@ Docker permite:
 - Ejecutar
 - Desplegar
 
-Con docker se crean paquetes de dependencias.
+Con Docker se crean paquetes de dependencias.
 
 ## Máquinas virtuales VS Contenedores
 
@@ -98,95 +98,111 @@ CMD bun run app.ts
 docker build -t nombre_imagen directorio_dockerfile
 ```
 
-## Listar images 
+## Listar imágenes
 
-```bash 
+```bash
 docker images ls
 ```
 
 ## Ejecutar una imagen
 Para eso debemos transformar la imagen en un contenedor.
 
-```bash 
+```bash
 docker run hi
 ```
 
 ## Listar contenedores 
 
-```bash 
+```bash
 docker ps -a
 ```
 
 ## Ejecutar contenedores en segundo plano
 
-```bash 
-docker -i start nombre_contenedor
+```bash
+docker start -i nombre_contenedor
 ```
 
 ## Eliminar contenedores 
 
-```bash 
+```bash
 docker rm -f nombre_contenedor
 ```
 
 # Linux 
 
-## Eliminar directorios y archivos 
-```bash 
+## Eliminar directorios y archivos
+```bash
 rm hi.txt
-rm -rf directorio # 
+rm -rf directorio #
 ```
-## 2.1 Editar archivos 
-nano 
+## 2.1 Editar archivos
+```bash
+nano
 more name.txt
 head -n 10
 tail -n 10
-
 tail -f : monitorear un archivo
+```
 
-## 2.2 Redirecciones 
+## 2.2 Redirecciones
+```bash
 >> | >
 cat name.txt > result.txt
+```
 
-## 2.3 Busqueda de texto 
-grep -> Global regular expression print
-
-grep -i hola name.txt 
+## 2.3 Busqueda de texto
+`grep` -> Global regular expression print
+```bash
+grep -i hola name.txt
 grep -i hola *.txt
+```
 
 ## 2.4 Busqueda de archivos y directorios
-find 
-find /directory -type d -> search just directory 
+```bash
+find
+find /directory -type d -> search just directory
 find /directory -type f -> search just file
-find /directory -type f -name | -iname "a*" -> search for pattern 
+find /directory -type f -name | -iname "a*" -> search for pattern
 find / -type f -iname ""
+```
 ## 2.5 Encadenando comandos
+```bash
 mkdir hello; cd hello; echo "ready"
 mkdir hello && cd hello && echo "ready"
 mkdir hello || cd hello || echo "ready"
+```
 
-Separate with line 
+Separate with line
+```bash
 mkdir hello :/
 > write other instructions
+```
 
 ## 2.6 Variables de entorno
-env - evarioment
-
+`env` - environment
+```bash
 echo $PATH
+```
 
 Crear variables de entorno
 
-export 
+```bash
+export
+```
 
-## 2.7 Gestion de procesos 
+## 2.7 Gestion de procesos
+```bash
 ps : list processes
 sleep 1000 & : run process in background
 jobs : list jobs
 fg : bring job to foreground
 bg : send job to background
 kill : kill process
+```
 
-## 2.8 Gestion de usuarios 
+## 2.8 Gestion de usuarios
+```bash
 useradd: add user
 usermod: modify user
 userdel: delete user
@@ -195,23 +211,29 @@ superuser -> #
 user normal -> $
 
 docker exec -it -u user <container_id> bash
+```
 
 
-## 2.9 Gestion de  grupos 
-group 
+## 2.9 Gestion de grupos
+```bash
+group
+```
 
 ## Permisos
 
-- file 
-d directory 
+- file
+d directory
 
+```bash
 -rw-rw-r-- 1 esg esg   27 Dec 25 15:32 app.ts
+```
 
-r read 
-w write 
+r read
+w write
 x execute
 
-Cambiar permisos 
+Cambiar permisos
+```bash
 chmod u+x file.sh
 chmod g+x file.sh
 chmod o+xw file.sh
@@ -219,6 +241,7 @@ chmod o+xw file.sh
 chmod u-w, g-wr, o+rw file.sh
 
 chmod u=rwx, g=rx, o=rx file.sh
+```
 
 
 
@@ -226,7 +249,7 @@ chmod u=rwx, g=rx, o=rx file.sh
 
 ## 3.1 Introducción 
 - Crear Dockerfile
-- Contruir img 
+- Construir img
 - Versionar img
 - Subir img 
 - Bajar img 
@@ -253,61 +276,64 @@ Container
 - Detenerse o iniciarse 
 
 ## 3.3 Dockerfile
-Este archivo contiene instruccion para construir una imagen.
+Este archivo contiene instrucciones para construir una imagen.
 
-FROM -> Indica la imagen base
+`FROM` -> Indica la imagen base
 
-WORKDIR -> Indica el directorio de trabajo
+`WORKDIR` -> Indica el directorio de trabajo
 
-COPY -> Copia archivos
-ADD -> Copia archivos
-RUN -> Ejecuta comandos
-ENV -> Define variables de entorno
-EXPOSE -> Indica puertos
-USER -> Define usuario
-CMD -> Define comando
-ENTRYPOINT -> Define punto de entrada
+`COPY` -> Copia archivos
+`ADD` -> Copia archivos
+`RUN` -> Ejecuta comandos
+`ENV` -> Define variables de entorno
+`EXPOSE` -> Indica puertos
+`USER` -> Define usuario
+`CMD` -> Define comando
+`ENTRYPOINT` -> Define punto de entrada
 
 ## 3.4 Elegiendo la imagen correcta
 
-Se eligue el sistema operativo base. 
+Se elige el sistema operativo base.
 
 Ejemplo: 
 
-FROM ubuntu:22.04 o FROM oven/bun:latest 
+`FROM ubuntu:22.04` o `FROM oven/bun:latest`
 
-Necesitamos una img que tenga bun instalado y sea lo mas ligera posible. 
+Necesitamos una img que tenga bun instalado y sea lo más ligera posible.
 
-* Construir la imagen 
- 
+* Construir la imagen
+```bash
 docker build -t app-bun .
+```
 
 * Ejecutar el contenedor de forma interactiva
-
+```bash
 sudo docker run -it app-bun sh
+```
 
 - con sh indicamos la terminal y poder acceder al s.o
 
 
-## 3.5 Copiar archivos al contenedor docker
+## 3.5 Copiar archivos al contenedor Docker
 
 
-WORKDIR /linvia/  -> Indica el directorio de trabajo
+`WORKDIR /linvia/`  -> Indica el directorio de trabajo
 
-COPY . . -> Copia los archivos del directorio actual al directorio de trabajo
+`COPY . .` -> Copia los archivos del directorio actual al directorio de trabajo
 
 El primer punto es el origen y el segundo es el destino.
 
 ## 3.6 Excluyendo archivos
-Todo esto se hace en el archivo .dockerignore
+Todo esto se hace en el archivo `.dockerignore`
 
 ## 3.7 Instalando dependencias
-
+```dockerfile
 RUN bun install
+```
 
 ## 3.8 Acelerando la construcción de imágenes
 
-- A partir de COPY en esta capa empieza los problemas hacia abajo. Al haber modificación en el código, se tiene que volver copiar todo el codigo y ejecutar bun install.
+- A partir de `COPY` en esta capa empieza los problemas hacia abajo. Al haber modificación en el código, se tiene que volver copiar todo el código y ejecutar `bun install`.
 
 - Pero podemos ordenar el Dockerfile de la siguiente manera:
 
@@ -324,63 +350,69 @@ COPY . .
 
 CMD bun run app.ts
 ```
-De esta manera solo se ejecutara bun install cuando se modifique package.json o bun.lock
+De esta manera solo se ejecutará `bun install` cuando se modifique `package.json` o `bun.lock`
 
 
 
 ## 3.9 Variables de entorno
-
+```dockerfile
 ENV email=eribertosg.dev@gmail.com
 ENV email eribertosg.dev@gmail.com
+```
 
 ## 3.10 Comandos CMD
+```bash
 sudo docker build -t app-bun .
-
 sudo docker run app-bun bun dev
+```
 
-En Dockerfile lo recomendable es utilizar 
-CMD [ "bun", "dev" ] 
+En Dockerfile lo recomendable es utilizar
+```dockerfile
+CMD [ "bun", "dev" ]
+```
 Esto se ejecuta dentro del mismo contenedor y no en una 
 nueva shell.
 
-RUN -> Se ejecuta en la construcción de la imagen.
-CMD -> Se ejecuta en la ejecución del contenedor.
-
-ENTRYPOINT -> Se ejecuta en la ejecución del contenedor.
+`RUN` -> Se ejecuta en la construcción de la imagen.
+`CMD` -> Se ejecuta en la ejecución del contenedor.
+`ENTRYPOINT` -> Se ejecuta en la ejecución del contenedor.
 
 * Podemos utilizar CMD y ENTRYPOINT juntos. Al final de cuenta hacen lo mismo.
 
 
 ## 3.11 Puertos
 
-EXPOSE -> Indica puertos, pero no lo expone al host.
+`EXPOSE` -> Indica puertos, pero no lo expone al host.
 
 
 ## 3.12 Usuarios
 
-USER -> Define usuario
+`USER` -> Define usuario
 
 
-Dentro del contenedor 
-adduser 
+Dentro del contenedor
+```bash
+adduser
+```
 
--G -> Grupo
--S -> System user
-
--D -> Don't assign a password
--H -> Don't create home directory
--u -> User id
--k -> Skeleton directory
+`-G` -> Grupo
+`-S` -> System user
+`-D` -> Don't assign a password
+`-H` -> Don't create home directory
+`-u` -> User id
+`-k` -> Skeleton directory
 
 Crear un grupo y un usuario
+```bash
 addgroup linvia
 adduser -S -G linvia ESG
+```
 
 * En Dockerfile
 RUN addgroup linvia && adduser -S -G linvia ESG
 USER ESG
 
-``` dockerfile
+```dockerfile
 FROM oven/bun:1.3.10-alpine
 # Crear un grupo y un usuario
 RUN addgroup linvia && adduser -S -G linvia ESG
@@ -388,7 +420,7 @@ USER ESG
 
 WORKDIR /linvia/
 
-# Copiar archivos al contenedor docker especificando el dueño
+# Copiar archivos al contenedor Docker especificando el dueño
 COPY --chown=ESG:linvia package.json bun.lock ./
 
 RUN bun install
@@ -432,14 +464,14 @@ sudo docker container prune
 
 ## 3.14 Etiquetas
 
-Asignar uan etiqueta al crear una imagen
+Asignar una etiqueta al crear una imagen
 
 ```bash
 sudo docker build -t app-bun:1.0.0 .
 ```
 
-Eliminar una imagen por etiqueta cuando existen 
-dos imágenes con la mismo id.
+Eliminar una imagen por etiqueta cuando existen
+dos imágenes con el mismo ID.
 
 ```bash
 sudo docker rm app-bun:1.0.0
@@ -453,15 +485,15 @@ sudo docker tag app-bun:1.0.0 app-bun:latest
 ## 3.15 Publicando imágenes
 
 ### Subir la imagen a GitHub Container Registry
-1. Configurar github 
-  - Entrar a setting 
-  - Developer setting 
-  - Personal access tokens 
-  - Token(classic) 
+1. Configurar GitHub
+  - Entrar a settings
+  - Developer settings
+  - Personal access tokens
+  - Token (classic)
   - Generate new token (Classic)
-  - Selecionar write:packages, read:packages, delete:packages, repo
+  - Seleccionar write:packages, read:packages, delete:packages, repo
 
-2. Iniciar sesion 
+2. Iniciar sesión
 
 ```bash
 docker login ghcr.io
@@ -470,7 +502,7 @@ docker login ghcr.io
 ```sh
 esg@esg:~/Documents/course/docker/linvia$ docker login ghcr.io
 Username: EribertoSG
-Password: Aqui va el token generado en github
+Password: Aquí va el token generado en GitHub
 
 WARNING! Your credentials are stored unencrypted in '/home/esg/.docker/config.json'.
 Configure a credential helper to remove this warning. See
@@ -490,15 +522,18 @@ sudo docker tag app-bun:1.0.1 ghcr.io/eribertosg/app-bun:1.0.1
 ```bash
 sudo docker push ghcr.io/eribertosg/app-bun:1.0.1
 ```
-5. (Opcional pero recomendado) crear el tag latest
+5. (Opcional pero recomendado) crear el tag `latest`
 
 Esto permite siempre descargar la versión más reciente.
-
+```bash
 docker tag app-bun:1.0.1 ghcr.io/EribertoSG/app-bun:latest
 docker push ghcr.io/EribertoSG/app-bun:latest
+```
 
 6. Luego podrás descargarla desde cualquier servidor
+```bash
 docker pull ghcr.io/EribertoSG/app-bun:1.0.1
+```
 
 ### Construir la imagen lista para subir:
 
@@ -518,12 +553,14 @@ La práctica común es tener:
 latest
 
 Entonces haces:
-
+```bash
 docker tag ghcr.io/eribertosg/app-bun:1.0.2 ghcr.io/eribertosg/app-bun:latest
+```
 
 Luego:
-
+```bash
 docker push ghcr.io/eribertosg/app-bun:latest
+```
 
 
 ## 3.16 Guardar y compartir imágenes
@@ -620,8 +657,8 @@ sudo docker container prune
 ```bash
 sudo docker logs app-bun
 ```
--f -> follow
---tail -> number of lines
+`-f` -> follow
+`--tail` -> number of lines
 
 ```bash
 sudo docker logs -f app-bun
@@ -630,7 +667,7 @@ sudo docker logs -f app-bun
 ```bash
 sudo docker logs -f --tail 10 app-bun
 ```
-* Mostrar logs con mas detalles 
+* Mostrar logs con más detalles
 
 ```bash
 docker logs -t -n 10 app-bun
@@ -639,7 +676,7 @@ docker logs -t -n 10 app-bun
 ## 4.4 Puertos 
 * Qué significa EXPOSE 8080 en tu Dockerfile
 
-``` dockerfile
+```dockerfile
 EXPOSE 8080
 ```
 Significa que el contenedor está escuchando en el puerto 8080, pero no lo expone al host.
@@ -661,9 +698,9 @@ docker run -P imagen
 
 
 ### Importante 
-El puerto se tiene que especificar al crear un contenedor. De lo contrario ya no se podra hacer despues al iniciarlo.
+El puerto se tiene que especificar al crear un contenedor. De lo contrario ya no se podrá hacer después al iniciarlo.
 
-Por eso es importante indicarle los puertos del host y contenedor Al crear y ejecutar.
+Por eso es importante indicarle los puertos del host y contenedor al crear y ejecutar.
 
 * Usar docker create con puertos
 
@@ -672,9 +709,9 @@ Crear un contenedor
 docker create -p 8080:8080 --name app-bun ghcr.io/eribertosg/app-bun:1.0.2
 ```
 
-y despues ejecutarlo
+y después ejecutarlo
 
-``` sh
+```sh
 docker start app-bun
 ```
 
@@ -840,15 +877,15 @@ sudo docker volume prune
 sudo docker run -d -p 8080:8080 --name linvia -v my-data:/linvia/data ghcr.io/eribertosg/app-bun:1.0.2
 ```
 
-* Cambiar los permisos de root al nombre del usuario 
-```Dockerfile 
+* Cambiar los permisos de root al nombre del usuario
+```dockerfile
 FROM oven/bun:1.3.10-alpine
 RUN addgroup linvia && adduser -S -G linvia ESG
 USER ESG
 
 WORKDIR /linvia/
 # Crear una carpeta para los volumenes
-RUN mkdir data 
+RUN mkdir data
 COPY --chown=ESG:linvia package.json bun.lock ./
 
 RUN bun install
@@ -867,7 +904,7 @@ CMD [ "bun", "dev" ]
 1. Dockerfile → describe cómo construir la imagen
 2. Imagen → plantilla inmutable
 ```sh
-  docker build -t app-bun .
+docker build -t app-bun .
 ```
 3. Contenedor → instancia ejecutable de la imagen
 ```sh
@@ -891,7 +928,7 @@ docker run -d -p 8080:8080 -v linvia-data:/linvia/data --name linvia app-bun
 
 Normalmente en:
 
-/var/lib/docker/volumes/
+`/var/lib/docker/volumes/`
 
 ### Cómo inspeccionar un volumen
 
@@ -905,11 +942,11 @@ docker volume inspect data
 Haciendo un bind mount (vinculación directa de un directorio del host).
 
 ```sh
-sudo docker -d p 8080:8080 --namebackend-2 -v ./index.ts:/linvia/index.ts ghcr.io/eribertosg/app-bun:1.0.3
+sudo docker run -d -p 8080:8080 --name backend-2 -v ./index.ts:/linvia/index.ts ghcr.io/eribertosg/app-bun:1.0.3
 ```
 
 El punto clave es:
--v ./index.ts:/linvia/index.ts
+`-v ./index.ts:/linvia/index.ts`
 
 Esto conecta:
 Directorio en tu computadora → Directorio dentro del contenedor
@@ -919,7 +956,7 @@ Directorio en tu computadora → Directorio dentro del contenedor
 ## Nota
 
 * Nunca se sobrescriben versiones
-- Las images se versionan asi: 
+- Las imágenes se versionan así:
 
 1.0.0 → primera versión
 1.0.1 → bug fix
@@ -930,18 +967,18 @@ Esto se llama semantic versioning.
 
 ## 4.10 Copiando archivos 
 
-* Copiar un archivo o directorio desde un contedor
+* Copiar un archivo o directorio desde un contenedor
 
 ```sh
 sudo docker cp backend-2:/linvia/container-docker.txt ../
 ```
-* Copiar desde el anfitrion a un container
+* Copiar desde el anfitrión a un container
 
 ```sh
 sudo docker cp host-file.txt backend-2:/linvia/
 ```
 
-# 5. Trabajando con multiples contenedores 
+# 5. Trabajando con múltiples contenedores
 ## 5.1  Limpiar espacio de trabajo
 * Listar contenedores 
 
