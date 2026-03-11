@@ -1760,3 +1760,62 @@ docker compose -f docker-compose.prod.yml up
 # Para pruebas
 docker compose -f docker-compose.test.yml up
 ```
+
+## 6.6 Optimizando el tamaño de las imagenes
+
+El objetivo es construir la version minificada de react y utilizar nginx para ejecutar la app.
+
+* Cuando se construyen las imagenes se pueden pasar dos tipos de comandos: 
+
+1. En una primera instancia
+RUN 
+WORKDIR
+ETC
+2. En una segunda instancia(se ejecuta cuando se esta creando el contenedor)
+COPY
+CMD
+ENTRYPOINT
+
+
+Etaps de un Dockerfile
+
+1. Build de la imagen
+2. Ejecución del contenedor
+
+
+```dockerfile
+# Paso 1 Build de la imagen
+# Se crea una imagen temporal para construir la aplicación
+FROM oven/bun:1.3.10-alpine AS build-stage
+# Se define una variable de entorno que se pasara al momento de construir la imagen
+ARG VITE_API_PROXY_TARGET 
+# Se asigna el valor de la variable de entorno
+ENV VITE_API_PROXY_TARGET=${VITE_API_PROXY_TARGET}
+WORKDIR /frontend/
+COPY package.json bun.lock ./
+RUN bun install
+COPY . .
+RUN [ "bun", "run", "build" ]
+
+# Paso 2 Ejecución del container
+# Se crea la imagen final con nginx
+FROM nginx:1.29.6-alpine-slim
+# Se copia el contenido del build-stage al contenedor de nginx
+COPY --from=build-stage /frontend/dist /usr/share/nginx/html
+# Se expone el puerto 5173
+EXPOSE 5173
+# Se inicia nginx
+CMD [ "nginx", "-g", "daemon off;" ]
+```
+
+* Configurar el docker-compose para especificar las variables de entorno
+
+```yaml
+services:
+  app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.pro.yml
+      args:
+        VITE_API_PROXY_TARGET: http://api:8080
+```

@@ -1,0 +1,17 @@
+# Paso 1 Build de la imagen
+FROM oven/bun:1.3.10-alpine AS build-stage
+ARG VITE_API_PROXY_TARGET
+ENV VITE_API_PROXY_TARGET=${VITE_API_PROXY_TARGET}
+WORKDIR /frontend/
+COPY package.json bun.lock ./
+
+RUN bun install
+
+COPY . .
+
+RUN [ "bun", "run", "build" ]
+# Paso 2 Ejecución del container
+FROM nginx:1.29.6-alpine-slim
+COPY --from=build-stage /frontend/dist /usr/share/nginx/html
+EXPOSE 80
+CMD [ "nginx", "-g", "daemon off;" ]
