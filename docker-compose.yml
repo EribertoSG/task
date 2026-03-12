@@ -53,3 +53,4 @@ services:
 volumes: # Nombre del volumen para persistir los datos. Este volumen es para psql
   postgres_data:
     name: task_postgres_data
+    external: true # El volumen no será eliminado por docker-compose down -v
